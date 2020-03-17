@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-body {margin:0; font-family: Arial, Helvetica, sans-serif;}
+body {
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
 .navbar {
   overflow: hidden;
@@ -13,6 +16,7 @@ body {margin:0; font-family: Arial, Helvetica, sans-serif;}
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 1;
 }
 
 .navbar a {
@@ -50,12 +54,12 @@ body {margin:0; font-family: Arial, Helvetica, sans-serif;}
   color: white;
 }
 /*====================================*/
-.dropdown {
+.m_dropdown {
   float: left;
   overflow: hidden;
 }
 
-.dropdown .dropbtn {
+.m_dropdown .dropbtn {
   font-size: 16px;  
   border: none;
   outline: none;
@@ -66,20 +70,19 @@ body {margin:0; font-family: Arial, Helvetica, sans-serif;}
   margin: 0;
 }
 
-.navbar a:hover, .dropdown:hover .dropbtn {
+.navbar a:hover, .m_dropdown:hover .dropbtn {
   background-color: #e91e63;
 }
 
-.dropdown-content {
+.m_dropdown-content {
   display: none;
   position: fixed;
   background-color: #f9f9f9;
   min-width: 180px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
 }
 
-.dropdown-content a {
+.m_dropdown-content a {
   float: none;
   color: black;
   padding: 12px 16px;
@@ -88,11 +91,11 @@ body {margin:0; font-family: Arial, Helvetica, sans-serif;}
   text-align: left;
 }
 
-.dropdown-content a:hover {
+.m_dropdown-content a:hover {
   background-color: #ddd;
 }
 
-.dropdown:hover .dropdown-content {
+.m_dropdown:hover .m_dropdown-content {
   display: block;
 }
 /*====================================*/
@@ -164,12 +167,13 @@ body {margin:0; font-family: Arial, Helvetica, sans-serif;}
   margin: 8px 2px;
   display: inline-block;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  /*border-radius: 4px;*/
   box-sizing: border-box;
 }
 /*====================================*/
 </style>
 <link rel="stylesheet" href="/public/css/m_common.css">
+<link href="public/img/favicon.ico" rel="icon" type="image/x-icon" />
 </head>
 <body onload="onLoadBody();">
 
@@ -179,21 +183,21 @@ body {margin:0; font-family: Arial, Helvetica, sans-serif;}
   <a href="/vf" class="btn">Vyšlé faktúry</a>
   <a href="/df" class="btn">Došlé faktúry</a>
   <a href="/banka" class="btn">Banka</a>
-  <div class="dropdown">
+  <div class="m_dropdown">
       <button class="dropbtn">Zostavy
         <i class="fa fa-caret-down"></i>
       </button>
-      <div class="dropdown-content">
+      <div class="m_dropdown-content">
         <a href="#">Stav podnikania</a>
         <a href="#">Kniha vyšlých faktúr</a>
       </div>
   </div>
   <div class="topnav-right">
-    <div class="dropdown">
+    <div class="m_dropdown">
       <button class="dropbtn">Nastavenia
         <i class="fa fa-caret-down"></i>
       </button>
-      <div class="dropdown-content">
+      <div class="m_dropdown-content">
         <a href="/pouzivatel">Používatelia</a>
         <a href="/firma">Firmy</a>
         <a href="#">Partneri</a>
@@ -201,14 +205,14 @@ body {margin:0; font-family: Arial, Helvetica, sans-serif;}
         <a href="/upload_vypisy">Načítať súbor bankových výpisov</a>
       </div>
     </div> 
-    <div class="dropdown">
+    <div class="m_dropdown">
       <button class="dropbtn"> 
         <i class="fa fa-fw fa-user"></i>
         <i class="fa fa-caret-down"></i>
       </button>
-      <div class="dropdown-content" style="right:0">
+      <div class="m_dropdown-content" style="right:0">
         <a href="#">Profil používateľa</a>
-        <a href="#">Odhlásiť</a>
+        <a href="/login">Odhlásiť</a>
       </div>
     </div> 
   </div> 

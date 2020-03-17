@@ -1,7 +1,7 @@
 package sk.euba.fhi.model.obj;
 
 public class Pouzivatel {
-    private long id;
+    private int id;
     private String login_meno;
     private String login_heslo;
     private String meno;
@@ -10,11 +10,11 @@ public class Pouzivatel {
     private String adresa;
     private String psc;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

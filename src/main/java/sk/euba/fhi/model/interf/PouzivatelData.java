@@ -6,8 +6,9 @@ import java.util.List;
 
 public interface PouzivatelData {
     List<Pouzivatel> vsetky();
-    Pouzivatel getPouzivatel(long id);
+    Pouzivatel getPouzivatel(int id);
+    Pouzivatel autentifikuj(String meno, String heslo);
     void vloz(Pouzivatel p);
     void zmen(Pouzivatel p);
-    void zmaz(long id);
+    void zmaz(int id);
 }

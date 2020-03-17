@@ -22,6 +22,10 @@
         <input class="m_input_text" id="suma_bez_dph" name="suma_bez_dph" value="${suma_bez_dph}" placeholder="cena bez DPH" required>
     </p>
     <p>
+        <label for="ovplyv_zd">Ovplyvňuje základ dane</label>
+        <input class="m_input_text" id="ovplyv_zd" name="ovplyv_zd" value="${ovplyv_zd}" placeholder="A/N" required>
+    </p>
+    <p>
         <label for="meno">Dátum</label>
         <input class="m_input_text" id="datum" name="datum" value="${datum}" placeholder="dátum" required>
     </p>

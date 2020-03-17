@@ -27,7 +27,7 @@ public class PouzivatelDataMock implements PouzivatelData {
             pouzivatel.setLogin_heslo("heslo");
             pouzivatel.setMeno("Katarína");
             pouzivatel.setPriezvisko("Szabóová");
-            pouzivatel.setEmail("kaktka12@gmail.com");
+            pouzivatel.setEmail("katka12@gmail.com");
             pouzivatel.setAdresa("Belehradská 8, Bratislava");
             pouzivatel.setPsc("80005");
             pouzivatelList.add(pouzivatel);
@@ -51,7 +51,7 @@ public class PouzivatelDataMock implements PouzivatelData {
         return pouzivatelList;
     }
 
-    public Pouzivatel getPouzivatel(long id) {
+    public Pouzivatel getPouzivatel(int id) {
         Predicate<Pouzivatel> byFilter = p -> p.getId() == id;
         List<Pouzivatel> result = pouzivatelList.stream().filter(byFilter)
                 .collect(Collectors.toList());
@@ -61,16 +61,30 @@ public class PouzivatelDataMock implements PouzivatelData {
 
     public void vloz(Pouzivatel pouzivatel) {
         Pouzivatel max = pouzivatelList.stream().reduce(pouzivatel, (a, b) -> a.getId() > b.getId() ? a : b);
-        pouzivatel.setId(max.getId() + 1L);
+        pouzivatel.setId(max.getId() + 1);
         pouzivatelList.add(pouzivatel);
     }
 
     public void zmen(Pouzivatel pouzivatel) {
     }
 
-    public void zmaz(long id) {
+    public void zmaz(int id) {
         Predicate<Pouzivatel> byFilter = p -> p.getId() != id;
         pouzivatelList = pouzivatelList.stream().filter(byFilter)
                 .collect(Collectors.toList());
+    }
+
+    public Pouzivatel autentifikuj(String meno, String heslo) {
+        Predicate<Pouzivatel> byFilter = p -> p.getLogin_meno().equals(meno);
+        List<Pouzivatel> result = pouzivatelList.stream().filter(byFilter)
+                .collect(Collectors.toList());
+        if (result.size() == 0) {
+            return null;
+        }
+        assert (result.size() != 1);
+        if (result.get(0).getLogin_heslo().equals(heslo)) {
+            return result.get(0);
+        }
+        return null;
     }
 }

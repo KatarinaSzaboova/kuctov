@@ -13,11 +13,11 @@ import java.util.*;
 public class PokladnaPage {
     public static void init(Pippo pippo) {
         pippo.GET("/pokladna", routeContext -> {
-            Session session = routeContext.getRequest().getSession(false);
-            if (null == session) {
-                routeContext.redirect("/");
+            String strid = routeContext.getSession("pouzivatel_id");
+            int pouzivatel_id = (strid != null) ? Integer.parseInt(strid) : 0;
+            if (pouzivatel_id == 0) {
+                routeContext.redirect("/login");
             }
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
             Integer year = routeContext.getParameter("selectedyear").toInt();
             if (0 != year) {
@@ -26,24 +26,24 @@ public class PokladnaPage {
             String firma = routeContext.getParameter("selectedfirma").toString();
             if (null != firma) {
                 prihlasenie.setFirma_nazov(firma);
-                FirmaData firmaData = DataFactory.createDaoFirma();
-                long firma_id = firmaData.idFirmy(pouzivatel_id, firma);
-                prihlasenie.setFirma_id(firma_id);
+                FirmaData firmaData = DataFactory.createFirmaData();
+                int firma_id = firmaData.idFirmy(pouzivatel_id, firma);
+                prihlasenie.setId_firma(firma_id);
             }
 
             Map<String, Object> model = new HashMap<>();
             model.put("selectedyear", prihlasenie.getRok());
             model.put("selectedfirma", prihlasenie.getFirma_nazov());
 
-            FirmaData firmaData = DataFactory.createDaoFirma();
+            FirmaData firmaData = DataFactory.createFirmaData();
             List<String> firmy = firmaData.nazvyFiriem(pouzivatel_id);
             model.put("firmy", firmy);
 
             List<Integer> roky = new ArrayList<>(Arrays.asList(2018, 2019, 2020));
             model.put("roky", roky);
 
-            PokladnaData pokladnaData = DataFactory.createDaoPokladna();
-            List<Pokladna> pokladnaList = pokladnaData.vsetky(prihlasenie.getFirma_id(), prihlasenie.getRok());
+            PokladnaData pokladnaData = DataFactory.createPokladnaData();
+            List<Pokladna> pokladnaList = pokladnaData.vsetky(prihlasenie.getId_firma(), prihlasenie.getRok());
             model.put("pokladnas", pokladnaList);
 
             routeContext.render("pokladna", model);
@@ -59,6 +59,7 @@ public class PokladnaPage {
             model.put("cislo_dokladu", "");
             model.put("suma_bez_dph", "");
             model.put("datum", "");
+            model.put("ovplyv_zd", "A");
 
             routeContext.render("pokladna_edit", model);
         });
@@ -70,19 +71,18 @@ public class PokladnaPage {
                 return;
             }
             Session session = routeContext.getRequest().getSession(false);
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
+            int pouzivatel_id = Integer.parseInt(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
 
-            Long cislo_dokladu = routeContext.getParameter("cislo_dokladu").toLong();
+            Integer cislo_dokladu = routeContext.getParameter("cislo_dokladu").toInt();
             String vzor = routeContext.getParameter("vzor").toString();
             String datum = routeContext.getParameter("datum").toString();
-            // String prijem_vydaj = routeContext.getParameter("prijem_vydaj").toString();
-            // String ovplyv_zd = routeContext.getParameter("ovplyv_zd").toString();
+            String ovplyv_zd = routeContext.getParameter("ovplyv_zd").toString();
             Double sumabez = routeContext.getParameter("suma_bez_dph").toDouble();
 
             Pokladna pokladna = new Pokladna();
-            pokladna.setId(0L);
-            pokladna.setId_firma(prihlasenie.getFirma_id());
+            pokladna.setId(0);
+            pokladna.setId_firma(prihlasenie.getId_firma());
             pokladna.setCislo_dokladu(cislo_dokladu);
             pokladna.setRok(prihlasenie.getRok());
             pokladna.setVzor(vzor);
@@ -90,10 +90,9 @@ public class PokladnaPage {
             pokladna.setMena("EUR");
             pokladna.setSuma_bez_dph(sumabez);
             pokladna.setSuma_s_dph(sumabez * 1.2);
-            pokladna.setPrijem_vydaj("A");
-            pokladna.setOvplyv_zd("A");
+            pokladna.setOvplyv_zd(ovplyv_zd);
 
-            PokladnaData pokladnaData = DataFactory.createDaoPokladna();
+            PokladnaData pokladnaData = DataFactory.createPokladnaData();
             pokladnaData.vloz(pokladna);
 
             if (action.equals("next")) {
@@ -109,9 +108,9 @@ public class PokladnaPage {
                 routeContext.redirect("/pokladna");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            PokladnaData data = DataFactory.createDaoPokladna();
+            PokladnaData data = DataFactory.createPokladnaData();
             data.zmaz(selectedid);
 
             routeContext.redirect("/pokladna");
@@ -123,9 +122,9 @@ public class PokladnaPage {
                 routeContext.redirect("/pokladna");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            PokladnaData pokladnaData = DataFactory.createDaoPokladna();
+            PokladnaData pokladnaData = DataFactory.createPokladnaData();
             Pokladna pokladna = pokladnaData.getPokladna(selectedid);
             Map<String, Object> model = new HashMap<>();
             model.put("selectedid", selectedid);
@@ -136,6 +135,7 @@ public class PokladnaPage {
             model.put("vzor", pokladna.getVzor());
             model.put("suma_bez_dph", pokladna.getSuma_bez_dph());
             model.put("datum", pokladna.getDatum());
+            model.put("ovplyv_zd", pokladna.getOvplyv_zd());
             routeContext.render("pokladna_edit", model);
         });
 
@@ -145,14 +145,15 @@ public class PokladnaPage {
                 routeContext.redirect("/pokladna");
                 return;
             }
-            Long selectedid = routeContext.getParameter("selectedid").toLong();
+            Integer selectedid = routeContext.getParameter("selectedid").toInt();
 
-            Long cislo_dokladu = routeContext.getParameter("cislo_dokladu").toLong();
+            Integer cislo_dokladu = routeContext.getParameter("cislo_dokladu").toInt();
             String vzor = routeContext.getParameter("vzor").toString();
             String datum = routeContext.getParameter("datum").toString();
             Double sumabez = routeContext.getParameter("suma_bez_dph").toDouble();
+            String ovplyv_zd = routeContext.getParameter("ovplyv_zd").toString();
 
-            PokladnaData pokladnaData = DataFactory.createDaoPokladna();
+            PokladnaData pokladnaData = DataFactory.createPokladnaData();
 
             Pokladna pokladna = pokladnaData.getPokladna(selectedid);
             pokladna.setCislo_dokladu(cislo_dokladu);
@@ -160,6 +161,8 @@ public class PokladnaPage {
             pokladna.setDatum(datum);
             pokladna.setSuma_bez_dph(sumabez);
             pokladna.setSuma_s_dph(sumabez * 1.2);
+            pokladna.setOvplyv_zd(ovplyv_zd);
+
             pokladnaData.zmen(pokladna);
 
             routeContext.redirect("/pokladna");

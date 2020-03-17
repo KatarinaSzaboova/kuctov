@@ -60,14 +60,17 @@ public class FirmaDataMock implements FirmaData {
         }
     }
 
-    public List<Firma> vsetky(long pouzivatel_id) {
+    public List<Firma> vsetky(int pouzivatel_id) {
+        if (pouzivatel_id == 0) {
+            return firmaList;
+        }
         Predicate<Firma> byFilter = p -> p.getId_pouzivatel() == pouzivatel_id;
         List<Firma> result = firmaList.stream().filter(byFilter)
                 .collect(Collectors.toList());
         return result;
     }
 
-    public List<String> nazvyFiriem(long pouzivatel_id) {
+    public List<String> nazvyFiriem(int pouzivatel_id) {
         Predicate<Firma> byFilter = p -> p.getId_pouzivatel() == pouzivatel_id;
         List<Firma> result = firmaList.stream().filter(byFilter)
                 .collect(Collectors.toList());
@@ -79,7 +82,7 @@ public class FirmaDataMock implements FirmaData {
         return nazvy;
     }
 
-    public long idFirmy(long pouzivatel_id, String firma_nazov) {
+    public int idFirmy(int pouzivatel_id, String firma_nazov) {
         Predicate<Firma> byFilter = p -> p.getId_pouzivatel() == pouzivatel_id && p.getNazov().equals(firma_nazov);
         List<Firma> result = firmaList.stream().filter(byFilter)
                 .collect(Collectors.toList());
@@ -87,7 +90,7 @@ public class FirmaDataMock implements FirmaData {
         return result.get(0).getId();
     }
 
-    public Firma getFirma(long id) {
+    public Firma getFirma(int id) {
         Predicate<Firma> byFilter = p -> p.getId() == id;
         List<Firma> result = firmaList.stream().filter(byFilter)
                 .collect(Collectors.toList());
@@ -97,14 +100,14 @@ public class FirmaDataMock implements FirmaData {
 
     public void vloz(Firma firma) {
         Firma max = firmaList.stream().reduce(firma, (a, b) -> a.getId() > b.getId() ? a : b);
-        firma.setId(max.getId() + 1L);
+        firma.setId(max.getId() + 1);
         firmaList.add(firma);
     }
 
     public void zmen(Firma firma) {
     }
 
-    public void zmaz(long id) {
+    public void zmaz(int id) {
         Predicate<Firma> byFilter = p -> p.getId() != id;
         firmaList = firmaList.stream().filter(byFilter)
                 .collect(Collectors.toList());

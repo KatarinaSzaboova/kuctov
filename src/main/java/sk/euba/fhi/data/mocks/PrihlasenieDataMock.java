@@ -22,28 +22,32 @@ public class PrihlasenieDataMock implements PrihlasenieData {
 
         {
             Prihlasenie prihlasenie = new Prihlasenie();
-            prihlasenie.setId_pouzivatel(1L);
+            prihlasenie.setId_pouzivatel(1);
             prihlasenie.setRok(2019);
-            prihlasenie.setFirma_id(1L);
+            prihlasenie.setId_firma(1);
             prihlasenie.setFirma_nazov("Firma 1");
-            prihlasenie.setUcet_id(1L);
+            prihlasenie.setId_ucet(1);
             prihlasenie.setUcet_nazov("Účet VÚB");
             prihlasenieList.add(prihlasenie);
         }
 
         {
             Prihlasenie prihlasenie = new Prihlasenie();
-            prihlasenie.setId_pouzivatel(2L);
+            prihlasenie.setId_pouzivatel(2);
             prihlasenie.setRok(2019);
-            prihlasenie.setFirma_id(3L);
+            prihlasenie.setId_firma(3);
             prihlasenie.setFirma_nazov("Firma 3");
-            prihlasenie.setUcet_id(3L);
+            prihlasenie.setId_ucet(4);
             prihlasenie.setUcet_nazov("Účet SLSP");
             prihlasenieList.add(prihlasenie);
         }
     }
 
-    public Prihlasenie getSession(long pouzivatel_id) {
+    public List<Prihlasenie> vsetky() {
+        return prihlasenieList;
+    }
+
+    public Prihlasenie getSession(int pouzivatel_id) {
         Predicate<Prihlasenie> byFilter = p -> p.getId_pouzivatel() == pouzivatel_id;
         List<Prihlasenie> result = prihlasenieList.stream().filter(byFilter)
                 .collect(Collectors.toList());

@@ -1,18 +1,18 @@
 package sk.euba.fhi.model.obj;
 
 public class Prihlasenie {
-    private Long id_pouzivatel = 0L;
+    private Integer id_pouzivatel = 0;
     private Integer rok = 0;
-    private Long firma_id = 0L;
+    private Integer id_firma = 0;
     private String firma_nazov = "";
-    private Long ucet_id = 0L;
+    private Integer id_ucet = 0;
     private String ucet_nazov = "";
 
-    public Long getId_pouzivatel() {
+    public Integer getId_pouzivatel() {
         return id_pouzivatel;
     }
 
-    public void setId_pouzivatel(Long id_pouzivatel) {
+    public void setId_pouzivatel(Integer id_pouzivatel) {
         this.id_pouzivatel = id_pouzivatel;
     }
 
@@ -24,12 +24,12 @@ public class Prihlasenie {
         this.rok = rok;
     }
 
-    public Long getFirma_id() {
-        return firma_id;
+    public Integer getId_firma() {
+        return id_firma;
     }
 
-    public void setFirma_id(Long firma_id) {
-        this.firma_id = firma_id;
+    public void setId_firma(Integer id_firma) {
+        this.id_firma = id_firma;
     }
 
     public String getFirma_nazov() {
@@ -40,12 +40,12 @@ public class Prihlasenie {
         this.firma_nazov = firma_nazov;
     }
 
-    public Long getUcet_id() {
-        return ucet_id;
+    public Integer getId_ucet() {
+        return id_ucet;
     }
 
-    public void setUcet_id(Long ucet_id) {
-        this.ucet_id = ucet_id;
+    public void setId_ucet(Integer id_ucet) {
+        this.id_ucet = id_ucet;
     }
 
     public String getUcet_nazov() {

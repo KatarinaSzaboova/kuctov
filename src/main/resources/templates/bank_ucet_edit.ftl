@@ -10,10 +10,6 @@
 <form action="${form_action}" method="post">
 <input name="selectedid" id="selectedid" value="${selectedid}" hidden></input>
     <p>
-        <label for="id_firma">ID firmy</label>
-        <input class="m_input_text" id="id_firma" name="id_firma" value="${id_firma}" placeholder="id firmy" required>
-    </p>
-    <p>
         <label for="nazov">Názov účtu</label>
         <input class="m_input_text" id="nazov" name="nazov" value="${nazov}" placeholder="nazov" required>
     </p>

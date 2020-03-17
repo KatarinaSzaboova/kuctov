@@ -1,4 +1,4 @@
-package sk.euba.fhi.data.mysql.connect;
+package sk.euba.fhi.data.mysql.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,10 @@ public class ConnectionManager {
         }
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("sk.euba.fhi.data:mysql://35.198.174.32:3306/SZABOOVA", "szaboova", "szaboova");
+            // connection = DriverManager.getConnection("sk.euba.fhi.data:mysql://35.198.174.32:3306/SZABOOVA", "szaboova", "szaboova");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb" +
+                    "?serverTimezone=CET&" +
+                    "useUnicode=true&characterEncoding=utf-8", "szaboova", "szaboova");
         } catch (SQLException ex) {
             logger.error("Chyba - nebolo možné sa pripojiť na databázu!", ex);
         }

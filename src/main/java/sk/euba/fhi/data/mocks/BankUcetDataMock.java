@@ -53,20 +53,30 @@ public class BankUcetDataMock implements BankUcetData {
             bankUcetList.add(bank_ucet);
         }
 
+        {
+            BankUcet bank_ucet = new BankUcet();
+            bank_ucet.setId(4);
+            bank_ucet.setId_firma(3);
+            bank_ucet.setNazov("Účet SLSP");
+            bank_ucet.setBic("GIBASKBX");
+            bank_ucet.setIban("SK330200000000000004444");
+            bank_ucet.setMena("EUR");
+            bankUcetList.add(bank_ucet);
+        }
     }
 
     public List<BankUcet> vsetky() {
         return bankUcetList;
     }
 
-    public List<BankUcet> preFirmu(long id_firma) {
+    public List<BankUcet> preFirmu(int id_firma) {
         Predicate<BankUcet> byFilter = p -> p.getId_firma() == id_firma;
         List<BankUcet> result = bankUcetList.stream().filter(byFilter)
                 .collect(Collectors.toList());
         return result;
     }
 
-    public BankUcet getBankUcet(long id) {
+    public BankUcet getBankUcet(int id) {
         Predicate<BankUcet> byFilter = p -> p.getId() == id;
         List<BankUcet> result = bankUcetList.stream().filter(byFilter)
                 .collect(Collectors.toList());
@@ -74,7 +84,7 @@ public class BankUcetDataMock implements BankUcetData {
         return result.get(0);
     }
 
-    public List<String> nazvyUctov(long id_firma) {
+    public List<String> nazvyUctov(int id_firma) {
         Predicate<BankUcet> byFilter = p -> p.getId_firma() == id_firma;
         List<BankUcet> result = bankUcetList.stream().filter(byFilter)
                 .collect(Collectors.toList());
@@ -86,7 +96,7 @@ public class BankUcetDataMock implements BankUcetData {
         return nazvy;
     }
 
-    public long idUctu(long id_firma, String ucet_nazov) {
+    public int idUctu(int id_firma, String ucet_nazov) {
         Predicate<BankUcet> byFilter = p -> p.getId_firma() == id_firma && p.getNazov().equals(ucet_nazov);
         List<BankUcet> result = bankUcetList.stream().filter(byFilter)
                 .collect(Collectors.toList());
@@ -96,14 +106,14 @@ public class BankUcetDataMock implements BankUcetData {
 
     public void vloz(BankUcet ucet) {
         BankUcet max = bankUcetList.stream().reduce(ucet, (a, b) -> a.getId() > b.getId() ? a : b);
-        ucet.setId(max.getId() + 1L);
+        ucet.setId(max.getId() + 1);
         bankUcetList.add(ucet);
     }
 
     public void zmen(BankUcet ucet) {
     }
 
-    public void zmaz(long id) {
+    public void zmaz(int id) {
         Predicate<BankUcet> byFilter = p -> p.getId() != id;
         bankUcetList = bankUcetList.stream().filter(byFilter)
                 .collect(Collectors.toList());

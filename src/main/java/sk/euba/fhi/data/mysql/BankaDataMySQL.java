@@ -2,7 +2,7 @@ package sk.euba.fhi.data.mysql;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sk.euba.fhi.data.mysql.connect.ConnectionManager;
+import sk.euba.fhi.data.mysql.common.ConnectionManager;
 import sk.euba.fhi.model.interf.BankaData;
 import sk.euba.fhi.model.obj.Banka;
 
@@ -16,33 +16,64 @@ import java.util.List;
 public class BankaDataMySQL implements BankaData {
     private static final Logger logger = LoggerFactory.getLogger(BankaDataMySQL.class);
 
-    public List<Banka> vsetky(long id_firmy, long id_uctu, int rok) {
-        List<Banka> bankaia = new ArrayList<>();
+    public List<Banka> vsetky(int id_firma, int id_ucet, int rok) {
+        List<Banka> zoznam = new ArrayList<>();
         Connection connection = new ConnectionManager().createConnection();
         if (connection != null) {
             try {
-                PreparedStatement ps = connection.prepareStatement("SELECT id, meno, ulica, mesto, psc FROM ac_banka");
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM banka WHERE id_firma = ? AND id_ucet = ? AND rok = ?");
+                ps.setInt(1, id_firma);
+                ps.setInt(2,id_ucet);
+                ps.setInt(3, rok);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
-                    Integer id = rs.getInt("id");
-                    String meno = rs.getString("meno");
-                    String ulica = rs.getString("ulica");
-                    String mesto = rs.getString("mesto");
-                    Integer psc = rs.getInt("psc");
-                    logger.debug("Id, meno, ulica, mesto a psc su: {}, {}, {}, {}, {}", id, meno, ulica, mesto, psc);
-                    // TODO Banka subject = new Banka(id, meno, ulica, mesto, psc);
-                    Banka subject = new Banka();
-                    bankaia.add(subject);
+                    Banka obj = new Banka();
+                    obj.setId(rs.getInt("id"));
+                    obj.setId_firma(rs.getInt("id_firma"));
+                    obj.setId_ucet(rs.getInt("id_ucet"));
+                    obj.setRok(rs.getInt("rok"));
+                    obj.setDatum(rs.getString("datum"));
+                    obj.setOvplyv_zd(rs.getString("ovplyv_zd"));
+                    obj.setMena(rs.getString("mena"));
+                    obj.setSuma(rs.getDouble("suma"));
+                    obj.setPartner(rs.getString("partner"));
+                    obj.setPartner_iban(rs.getString("partner_iban"));
+                    zoznam.add(obj);
                 }
             } catch (SQLException ex) {
                 logger.error(ex.getMessage(), ex);
             }
         }
-        return bankaia;
+        return zoznam;
     }
 
-    public Banka getBanka(long id) {
-        return new Banka();
+    public Banka getBanka(int id) {
+        Banka banka = null;
+        Connection connection = new ConnectionManager().createConnection();
+        if (connection != null) {
+            try {
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM banka WHERE id = ?;");
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    banka = new Banka();
+                    banka.setId(rs.getInt("id"));
+                    banka.setId_firma(rs.getInt("id_firma"));
+                    banka.setId_ucet(rs.getInt("id_ucet"));
+                    banka.setRok(rs.getInt("rok"));
+                    banka.setDatum(rs.getString("datum"));
+                    banka.setOvplyv_zd(rs.getString("ovplyv_zd"));
+                    banka.setMena(rs.getString("mena"));
+                    banka.setSuma(rs.getDouble("suma"));
+                    banka.setPartner(rs.getString("partner"));
+                    banka.setPartner_iban(rs.getString("partner_iban"));
+                }
+            } catch (SQLException ex) {
+                //logger.error(ex.getMessage(), ex);
+            }
+        }
+        return banka;
+
     }
 
     public void vloz(Banka banka) {
@@ -50,25 +81,73 @@ public class BankaDataMySQL implements BankaData {
         Connection connection = new ConnectionManager().createConnection();
         if (connection != null) {
             try {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO ac_banka (meno, ulica, mesto, psc) VALUES (?, ?, ?, ?)");
-                //ps.setString(1, banka.getMeno());
-                //ps.setString(2, banka.getUlica());
-                //ps.setString(3, banka.getMesto());
-                //ps.setInt(4, banka.getPsc());
-                // TODO
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO banka (id_firma, id_ucet, rok, datum, ovplyv_zd, mena, suma, partner, partner_iban) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )");
+                ps.setInt(1, banka.getId_firma());
+                ps.setInt(2, banka.getId_ucet());
+                ps.setInt(3, banka.getRok());
+                ps.setString(4, banka.getDatum());
+                ps.setString(5, banka.getOvplyv_zd());
+                ps.setString(6, banka.getMena());
+                ps.setDouble(7, banka.getSuma());
+                ps.setString(8, banka.getPartner());
+                ps.setString(9, banka.getPartner_iban());
                 int rows = ps.executeUpdate();
-                logger.debug("Pocet vlozenych riadkov: {}", rows);
+                //logger.debug("Pocet vlozenych riadkov: {}", rows);
             } catch (SQLException ex) {
                 logger.error(ex.getMessage(), ex);
             }
         }
     }
+
     public void zmen(Banka banka) {
-        // TODO
+        Connection connection = new ConnectionManager().createConnection();
+        if (connection != null) {
+            try {
+                PreparedStatement ps = connection.prepareStatement("UPDATE banka\n" +
+                        "SET \n" +
+                        "    id_firma = ?, \n" +
+                        "    id_ucet = ?, \n" +
+                        "    rok = ?,\n" +
+                        "    datum = ?,\n" +
+                        "    ovplyv_zd = ?,\n" +
+                        "    mena = ?,\n" +
+                        "    suma = ?\n" +
+                        "    partner = ?\n" +
+                        "    partner_iban = ?\n" +
+                        "WHERE\n" +
+                        "    id = ?;");
+
+                ps.setInt(1, banka.getId_firma());
+                ps.setInt(2, banka.getId_ucet());
+                ps.setInt(3, banka.getRok());
+                ps.setString(4,banka.getDatum());
+                ps.setString(5, banka.getOvplyv_zd());
+                ps.setString(6, banka.getMena());
+                ps.setDouble(7, banka.getSuma());
+                ps.setString(8, banka.getPartner());
+                ps.setString(9, banka.getPartner_iban());
+                ps.setInt(10, banka.getId());
+                int rows = ps.executeUpdate();
+                assert (rows != 1);
+            } catch (SQLException ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+        }
     }
 
-    public void zmaz(long id) {
-        // TODO
+    public void zmaz(int id) {
+        Connection connection = new ConnectionManager().createConnection();
+        if (connection != null) {
+            try {
+                PreparedStatement ps = connection.prepareStatement("DELETE FROM banka\n" +
+                        "WHERE id = ?;");
+                ps.setInt(1, id);
+                int rows = ps.executeUpdate();
+                assert (rows != 1);
+            } catch (SQLException ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+        }
     }
 
 }

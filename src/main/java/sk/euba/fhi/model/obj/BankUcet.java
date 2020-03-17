@@ -1,27 +1,27 @@
 package sk.euba.fhi.model.obj;
 
 public class BankUcet {
-    private long id;
-    private long id_firma;
+    private int id;
+    private int id_firma;
     private String nazov;
     private String bic;
     private String iban;
     private String mena;
 
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getId_firma() {
+    public int getId_firma() {
         return id_firma;
     }
 
-    public void setId_firma(long id_firma) {
+    public void setId_firma(int id_firma) {
         this.id_firma = id_firma;
     }
 

@@ -1,8 +1,8 @@
 package sk.euba.fhi.model.obj;
 
 public class Firma {
-    private long id;
-    private long id_pouzivatel;
+    private int id;
+    private int id_pouzivatel;
     private String nazov;
     private String adresa;
     private String psc;
@@ -11,19 +11,19 @@ public class Firma {
     private String ic_dph;
 
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getId_pouzivatel() {
+    public int getId_pouzivatel() {
         return id_pouzivatel;
     }
 
-    public void setId_pouzivatel(long id_pouzivatel) {
+    public void setId_pouzivatel(int id_pouzivatel) {
         this.id_pouzivatel = id_pouzivatel;
     }
 

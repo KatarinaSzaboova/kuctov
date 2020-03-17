@@ -8,63 +8,63 @@ import sk.euba.fhi.model.obj.Prihlasenie;
 public class DataFactory {
     static boolean isMock = true;
 
-    public static VFData createDaoVF() {
+    public static VFData createVFData() {
         if (true == isMock)
             return new VFDataMock();
         else
             return new VFDataMySQL();
     }
 
-    public static DFData createDaoDF() {
+    public static DFData createDFData() {
         if (true == isMock)
             return new DFDataMock();
         else
             return new DFDataMySQL();
     }
 
-    public static PokladnaData createDaoPokladna() {
+    public static PokladnaData createPokladnaData() {
         if (true == isMock)
             return new PokladnaDataMock();
         else
             return new PokladnaDataMySQL();
     }
 
-    public static PouzivatelData createDaoPouzivatel() {
+    public static PouzivatelData createPouzivatelData() {
         if (true == isMock)
             return new PouzivatelDataMock();
         else
             return new PouzivatelDataMySQL();
     }
 
-    public static BankaData createDaoBanka() {
+    public static BankaData createBankaData() {
         if (true == isMock)
             return new BankaDataMock();
         else
             return new BankaDataMySQL();
     }
 
-    public static BankUcetData createDaoBankUcet() {
+    public static BankUcetData createBankUcetData() {
         if (true == isMock)
             return new BankUcetDataMock();
         else
             return new BankUcetDataMySQL();
     }
 
-    public static FirmaData createDaoFirma() {
+    public static FirmaData createFirmaData() {
         if (true == isMock)
             return new FirmaDataMock();
         else
             return new FirmaDataMySQL();
     }
 
-    public static PrihlasenieData createDaoSession() {
+    public static PrihlasenieData createSessionData() {
         if (true == isMock)
             return new PrihlasenieDataMock();
         else
             return new PrihlasenieDataMySQL();
     }
-    public static Prihlasenie getPrihlasenie(long pouzivatel_id) {
-        PrihlasenieData sessionData = DataFactory.createDaoSession();
+    public static Prihlasenie getPrihlasenie(int pouzivatel_id) {
+        PrihlasenieData sessionData = DataFactory.createSessionData();
         return sessionData.getSession(pouzivatel_id);
     }
 }

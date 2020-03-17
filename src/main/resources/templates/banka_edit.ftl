@@ -22,10 +22,6 @@
         <input class="m_input_text" id="partner_iban" name="partner_iban" value="${partner_iban}" placeholder="partner iban" required>
     </p>
     <p>
-        <label for="prijem_vydaj">Príjem / výdaj</label>
-        <input class="m_input_text" id="prijem_vydaj" name="prijem_vydaj" value="${prijem_vydaj}" placeholder="P/V" required>
-    </p>
-    <p>
         <label for="ovplyv_zd">Ovplyvňuje základ dane</label>
         <input class="m_input_text" id="ovplyv_zd" name="ovplyv_zd" value="${ovplyv_zd}" placeholder="A/N" required>
     </p>

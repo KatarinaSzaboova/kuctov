@@ -2,9 +2,9 @@ package sk.euba.fhi.model.obj;
 
 
 public class DF {
-    private long id;
-    private long id_firma;
-    private long cislo_faktury;
+    private int id;
+    private int id_firma;
+    private int cislo_faktury;
     private int rok;
     private String dodavatel;
     private String datum;
@@ -15,25 +15,25 @@ public class DF {
     private double suma_s_dph;
 
 
-    public long getId() { return id;}
+    public int getId() { return id;}
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getId_firma() {
+    public int getId_firma() {
         return id_firma;
     }
 
-    public void setId_firma(long id_firma) {
+    public void setId_firma(int id_firma) {
         this.id_firma = id_firma;
     }
 
-    public long getCislo_faktury() {
+    public int getCislo_faktury() {
         return cislo_faktury;
     }
 
-    public void setCislo_faktury(long cislo_faktury) {
+    public void setCislo_faktury(int cislo_faktury) {
         this.cislo_faktury = cislo_faktury;
     }
 

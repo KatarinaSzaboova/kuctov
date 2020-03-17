@@ -2,9 +2,9 @@ package sk.euba.fhi.model.obj;
 
 
 public class Banka {
-    private long id;
-    private long id_firma;
-    private long id_ucet;
+    private int id;
+    private int id_firma;
+    private int id_ucet;
     private int rok;
     private String datum;
     private String ovplyv_zd;
@@ -13,27 +13,27 @@ public class Banka {
     private String partner;
     private String partner_iban;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getId_firma() {
+    public int getId_firma() {
         return id_firma;
     }
 
-    public void setId_firma(long id_firma) {
+    public void setId_firma(int id_firma) {
         this.id_firma = id_firma;
     }
 
-    public long getId_ucet() {
+    public int getId_ucet() {
         return id_ucet;
     }
 
-    public void setId_ucet(long id_ucet) {
+    public void setId_ucet(int id_ucet) {
         this.id_ucet = id_ucet;
     }
 

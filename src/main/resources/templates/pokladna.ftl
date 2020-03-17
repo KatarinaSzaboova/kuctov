@@ -57,7 +57,6 @@
         <th>Číslo Dokladu</th>
         <th>Vzor</th>
         <th>Dátum</th>
-        <th>Príjem/Výdaj</th>
         <th>Ovplyvňuje základ dane</th>
         <th>Suma bez DPH</th>
         <th>Suma s DPH</th>
@@ -70,7 +69,6 @@
                 <td>${pokladna.cislo_dokladu}</td>
                 <td>${pokladna.vzor}</td>
                 <td>${pokladna.datum}</td>
-                <td>${pokladna.prijem_vydaj}</td>
                 <td>${pokladna.ovplyv_zd}</td>
                 <td>${pokladna.suma_bez_dph}</td>
                 <td>${pokladna.suma_s_dph}</td>

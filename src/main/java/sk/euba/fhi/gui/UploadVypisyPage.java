@@ -32,6 +32,11 @@ public class UploadVypisyPage {
 
     public static void init(Pippo pippo) {
         pippo.GET("/upload_vypisy", routeContext -> {
+            String strid = routeContext.getSession("pouzivatel_id");
+            int pouzivatel_id = (strid != null) ? Integer.parseInt(strid) : 0;
+            if (pouzivatel_id == 0) {
+                routeContext.redirect("/login");
+            }
             String error = routeContext.getParameter("error").toString();
             String info = routeContext.getParameter("info").toString();
 
@@ -46,14 +51,14 @@ public class UploadVypisyPage {
             System.out.println("submitter = " + submitter);
 
             Session session = routeContext.getRequest().getSession(false);
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
+            int pouzivatel_id = Integer.parseInt(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
 
             FileItem file = routeContext.getRequest().getFile("file");
             System.out.println("file = " + file);
             try {
                 String fileName = file.getSubmittedFileName();
-                String toDir = "upload/firma" + prihlasenie.getFirma_id().toString() + "/";
+                String toDir = "upload/firma" + prihlasenie.getId_firma().toString() + "/";
                 Files.createDirectories(Paths.get(toDir));
                 String filePath = toDir + fileName;
                 File uploadedFile = new File(filePath);
@@ -69,24 +74,28 @@ public class UploadVypisyPage {
                     List<String> zaznam = zaznamy.get(i);
 
                     String datum = zaznam.get(0);
+                    String rok = datum.substring(datum.length() - 4);
+                    String mesiac = datum.substring(3, 5);
+                    String den = datum.substring(0, 2);
+                    datum = rok + "-" + mesiac + "-" + den;
                     Double suma = Double.parseDouble(zaznam.get(1).replace(",", "."));
                     String mena = zaznam.get(2);
                     String partner = zaznam.get(3);
                     String partner_iban = zaznam.get(4);
 
                     Banka banka = new Banka();
-                    banka.setId(0L);
-                    banka.setId_firma(prihlasenie.getFirma_id());
-                    banka.setId_ucet(prihlasenie.getUcet_id());
-                    banka.setRok(prihlasenie.getRok()); //****
+                    banka.setId(0);
+                    banka.setId_firma(prihlasenie.getId_firma());
+                    banka.setId_ucet(prihlasenie.getId_ucet());
+                    banka.setRok(Integer.parseInt(rok));
                     banka.setDatum(datum);
-                    banka.setOvplyv_zd("N"); //****
+                    banka.setOvplyv_zd("A");
                     banka.setMena(mena);
                     banka.setSuma(suma);
                     banka.setPartner(partner);
                     banka.setPartner_iban(partner_iban);
 
-                    BankaData bankaData = DataFactory.createDaoBanka();
+                    BankaData bankaData = DataFactory.createBankaData();
                     bankaData.vloz(banka);
                 }
             } catch (IOException e) {

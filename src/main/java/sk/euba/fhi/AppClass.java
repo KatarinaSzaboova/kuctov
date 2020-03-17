@@ -12,7 +12,6 @@ import ro.pippo.session.SessionManager;
 import ro.pippo.session.SessionRequestResponseFactory;
 import ro.pippo.session.cookie.CookieSessionDataStorage;
 
-
 public class AppClass extends Application {
     static Pippo pippo = null;
 
@@ -21,16 +20,16 @@ public class AppClass extends Application {
         this.addPublicResourceRoute(); // "/public/..."
 
         this.GET("/", routeContext -> {
+            String strid = routeContext.getSession("pouzivatel_id");
+            long pouzivatel_id = (strid != null) ? Long.parseLong(strid) : 0;
+            if (pouzivatel_id == 0) {
+                routeContext.redirect("/login");
+            }
             Map<String, Object> model = new HashMap<>();
             routeContext.render("index", model);
         });
 
-        this.GET("/session", (routeContext) -> {
-            routeContext.setSession("name", "kuctov");
-            routeContext.setSession("pouzivatel_id", "1");
-            routeContext.redirect("/");
-        });
-
+        LoginPage.init(pippo);
         VFPage.init(pippo);
         DFPage.init(pippo);
         PokladnaPage.init(pippo);

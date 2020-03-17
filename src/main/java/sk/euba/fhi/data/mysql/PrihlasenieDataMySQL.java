@@ -2,7 +2,7 @@ package sk.euba.fhi.data.mysql;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sk.euba.fhi.data.mysql.connect.ConnectionManager;
+import sk.euba.fhi.data.mysql.common.ConnectionManager;
 import sk.euba.fhi.model.interf.PrihlasenieData;
 import sk.euba.fhi.model.obj.Prihlasenie;
 
@@ -18,30 +18,30 @@ public class PrihlasenieDataMySQL implements PrihlasenieData {
 
     public List<Prihlasenie> vsetky() {
         List<Prihlasenie> sessionList = new ArrayList<>();
+        return sessionList;
+    }
+
+    public Prihlasenie getSession(int id_pouzivatel) {
+        Prihlasenie obj = null;
         Connection connection = new ConnectionManager().createConnection();
         if (connection != null) {
             try {
-                PreparedStatement ps = connection.prepareStatement("SELECT id, meno, ulica, mesto, psc FROM ac_session");
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM prihlasenie WHERE id_pouzivatel = ?;");
+                ps.setInt(1, id_pouzivatel);
                 ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    Integer id = rs.getInt("id");
-                    String meno = rs.getString("meno");
-                    String ulica = rs.getString("ulica");
-                    String mesto = rs.getString("mesto");
-                    Integer psc = rs.getInt("psc");
-                    logger.debug("Id, meno, ulica, mesto a psc su: {}, {}, {}, {}, {}", id, meno, ulica, mesto, psc);
-                    // TODO Prihlasenie subject = new Prihlasenie(id, meno, ulica, mesto, psc);
-                    Prihlasenie subject = new Prihlasenie();
-                    sessionList.add(subject);
+                if (rs.next()) {
+                    obj = new Prihlasenie();
+                    obj.setId_pouzivatel(rs.getInt("id_pouzivatel"));
+                    obj.setRok(rs.getInt("rok"));
+                    obj.setId_firma(rs.getInt("id_firma"));
+                    obj.setFirma_nazov(rs.getString("firma_nazov"));
+                    obj.setId_ucet(rs.getInt("id_ucet"));
+                    obj.setUcet_nazov(rs.getString("ucet_nazov"));
                 }
             } catch (SQLException ex) {
                 logger.error(ex.getMessage(), ex);
             }
         }
-        return sessionList;
-    }
-
-    public Prihlasenie getSession(long pouzivatel_id) {
-        return new Prihlasenie();
+        return obj;
     }
 }

@@ -1,7 +1,6 @@
 package sk.euba.fhi.gui;
 
 import ro.pippo.core.Pippo;
-import ro.pippo.core.Session;
 import sk.euba.fhi.data.DataFactory;
 import sk.euba.fhi.model.interf.BankUcetData;
 import sk.euba.fhi.model.obj.BankUcet;
@@ -14,15 +13,15 @@ import java.util.Map;
 public class BankUcetPage {
     public static void init(Pippo pippo) {
         pippo.GET("/bank_ucet", routeContext -> {
-            Session session = routeContext.getRequest().getSession(false);
-            if (null == session) {
-                routeContext.redirect("/");
+            String strid = routeContext.getSession("pouzivatel_id");
+            int pouzivatel_id = (strid != null) ? Integer.parseInt(strid) : 0;
+            if (pouzivatel_id == 0) {
+                routeContext.redirect("/login");
             }
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
 
-            BankUcetData bank_ucetData = DataFactory.createDaoBankUcet();
-            List<BankUcet> bank_ucetList = bank_ucetData.vsetky();
+            BankUcetData bank_ucetData = DataFactory.createBankUcetData();
+            List<BankUcet> bank_ucetList = bank_ucetData.preFirmu(prihlasenie.getId_firma());
             Map<String, Object> model = new HashMap<>();
             model.put("bank_ucets", bank_ucetList);
             routeContext.render("bank_ucet", model);
@@ -34,7 +33,6 @@ public class BankUcetPage {
             model.put("title", "Nový bankový účet");
             model.put("form_action", "/bank_ucet_new");
 
-            model.put("id_firmy", "");
             model.put("nazov", "");
             model.put("bic", "");
             model.put("iban", "");
@@ -49,6 +47,10 @@ public class BankUcetPage {
                 routeContext.redirect("/bank_ucet");
                 return;
             }
+            String strid = routeContext.getSession("pouzivatel_id");
+            int pouzivatel_id = (strid != null) ? Integer.parseInt(strid) : 0;
+            Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
+
 
             String nazov = routeContext.getParameter("nazov").toString();
             String bic = routeContext.getParameter("bic").toString();
@@ -57,13 +59,13 @@ public class BankUcetPage {
 
             BankUcet bank_ucet = new BankUcet();
             bank_ucet.setId(0);
-            bank_ucet.setId_firma(0);
+            bank_ucet.setId_firma(prihlasenie.getId_firma());
             bank_ucet.setNazov(nazov);
             bank_ucet.setBic(bic);
             bank_ucet.setIban(iban);
             bank_ucet.setMena(mena);
 
-            BankUcetData bank_ucetData = DataFactory.createDaoBankUcet();
+            BankUcetData bank_ucetData = DataFactory.createBankUcetData();
             bank_ucetData.vloz(bank_ucet);
 
             if (action.equals("next")) {
@@ -79,9 +81,9 @@ public class BankUcetPage {
                 routeContext.redirect("/bank_ucet");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            BankUcetData data = DataFactory.createDaoBankUcet();
+            BankUcetData data = DataFactory.createBankUcetData();
             data.zmaz(selectedid);
 
             routeContext.redirect("/bank_ucet");
@@ -93,16 +95,15 @@ public class BankUcetPage {
                 routeContext.redirect("/bank_ucet");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            BankUcetData bank_ucetData = DataFactory.createDaoBankUcet();
+            BankUcetData bank_ucetData = DataFactory.createBankUcetData();
             BankUcet bank_ucet = bank_ucetData.getBankUcet(selectedid);
             Map<String, Object> model = new HashMap<>();
             model.put("selectedid", selectedid);
             model.put("title", "Zmena bankového účtu");
             model.put("form_action", "/bank_ucet_change");
 
-            model.put("id_firmy", bank_ucet.getId_firma());
             model.put("nazov", bank_ucet.getNazov());
             model.put("bic", bank_ucet.getBic());
             model.put("iban", bank_ucet.getIban());
@@ -117,18 +118,16 @@ public class BankUcetPage {
                 routeContext.redirect("/bank_ucet");
                 return;
             }
-            Long selectedid = routeContext.getParameter("selectedid").toLong();
+            Integer selectedid = routeContext.getParameter("selectedid").toInt();
 
-            Long id_firmy = routeContext.getParameter("id_firmy").toLong();
             String nazov = routeContext.getParameter("nazov").toString();
             String bic = routeContext.getParameter("bic").toString();
             String iban = routeContext.getParameter("iban").toString();
             String mena = routeContext.getParameter("mena").toString();
 
-            BankUcetData bank_ucetData = DataFactory.createDaoBankUcet();
+            BankUcetData bank_ucetData = DataFactory.createBankUcetData();
             BankUcet bank_ucet = bank_ucetData.getBankUcet(selectedid);
 
-            bank_ucet.setId_firma(id_firmy);
             bank_ucet.setNazov(nazov);
             bank_ucet.setBic(bic);
             bank_ucet.setIban(iban);

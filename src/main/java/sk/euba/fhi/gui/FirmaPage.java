@@ -14,14 +14,14 @@ import java.util.Map;
 public class FirmaPage {
     public static void init(Pippo pippo) {
         pippo.GET("/firma", routeContext -> {
-            Session session = routeContext.getRequest().getSession(false);
-            if (null == session) {
-                routeContext.redirect("/");
+            String strid = routeContext.getSession("pouzivatel_id");
+            int pouzivatel_id = (strid != null) ? Integer.parseInt(strid) : 0;
+            if (pouzivatel_id == 0) {
+                routeContext.redirect("/login");
             }
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
 
-            FirmaData firmaData = DataFactory.createDaoFirma();
+            FirmaData firmaData = DataFactory.createFirmaData();
             List<Firma> firmaList = firmaData.vsetky(pouzivatel_id);
             Map<String, Object> model = new HashMap<>();
             model.put("firmas", firmaList);
@@ -53,11 +53,8 @@ public class FirmaPage {
                 return;
             }
             Session session = routeContext.getRequest().getSession(false);
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
-            Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
+            int pouzivatel_id = Integer.parseInt(session.get("pouzivatel_id"));
 
-            Long id = routeContext.getParameter("id").toLong();
-            Long id_pouzivatel = routeContext.getParameter("id_pouzivatel").toLong();
             String nazov = routeContext.getParameter("nazov").toString();
             String adresa = routeContext.getParameter("adresa").toString();
             String psc = routeContext.getParameter("psc").toString();
@@ -65,10 +62,9 @@ public class FirmaPage {
             String dic = routeContext.getParameter("dic").toString();
             String ic_dph = routeContext.getParameter("ic_dph").toString();
 
-
             Firma firma = new Firma();
             firma.setId(0);
-            firma.setId_pouzivatel(prihlasenie.getId_pouzivatel());
+            firma.setId_pouzivatel(pouzivatel_id);
             firma.setNazov(nazov);
             firma.setAdresa(adresa);
             firma.setPsc(psc);
@@ -77,7 +73,7 @@ public class FirmaPage {
             firma.setIc_dph(ic_dph);
             firma.setPsc(psc);
 
-            FirmaData firmaData = DataFactory.createDaoFirma();
+            FirmaData firmaData = DataFactory.createFirmaData();
             firmaData.vloz(firma);
 
             if (action.equals("next")) {
@@ -93,9 +89,9 @@ public class FirmaPage {
                 routeContext.redirect("/firma");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            FirmaData data = DataFactory.createDaoFirma();
+            FirmaData data = DataFactory.createFirmaData();
             data.zmaz(selectedid);
 
             routeContext.redirect("/firma");
@@ -107,16 +103,15 @@ public class FirmaPage {
                 routeContext.redirect("/firma");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            FirmaData firmaData = DataFactory.createDaoFirma();
+            FirmaData firmaData = DataFactory.createFirmaData();
             Firma firma = firmaData.getFirma(selectedid);
             Map<String, Object> model = new HashMap<>();
             model.put("selectedid", selectedid);
             model.put("title", "Zmena Firmy");
             model.put("form_action", "/firma_change");
 
-            model.put("id", 0);
             model.put("id_pouzivatel", firma.getId_pouzivatel());
             model.put("nazov", firma.getNazov());
             model.put("adresa", firma.getAdresa());
@@ -134,7 +129,7 @@ public class FirmaPage {
                 routeContext.redirect("/firma");
                 return;
             }
-            Long selectedid = routeContext.getParameter("selectedid").toLong();
+            Integer selectedid = routeContext.getParameter("selectedid").toInt();
 
             String nazov = routeContext.getParameter("nazov").toString();
             String adresa = routeContext.getParameter("adresa").toString();
@@ -143,7 +138,7 @@ public class FirmaPage {
             String dic = routeContext.getParameter("dic").toString();
             String ic_dph = routeContext.getParameter("ic_dph").toString();
 
-            FirmaData firmaData = DataFactory.createDaoFirma();
+            FirmaData firmaData = DataFactory.createFirmaData();
             Firma firma = firmaData.getFirma(selectedid);
 
             firma.setNazov(nazov);
@@ -151,7 +146,7 @@ public class FirmaPage {
             firma.setPsc(psc);
             firma.setIco(ico);
             firma.setDic(dic);
-            firma.setPsc(ic_dph);
+            firma.setIc_dph(ic_dph);
 
             firmaData.zmen(firma);
 

@@ -12,7 +12,12 @@ import java.util.Map;
 public class PouzivatelPage {
     public static void init(Pippo pippo) {
         pippo.GET("/pouzivatel", routeContext -> {
-            PouzivatelData pouzivatelData = DataFactory.createDaoPouzivatel();
+            String strid = routeContext.getSession("pouzivatel_id");
+            int pouzivatel_id = (strid != null) ? Integer.parseInt(strid) : 0;
+            if (pouzivatel_id == 0) {
+                routeContext.redirect("/login");
+            }
+            PouzivatelData pouzivatelData = DataFactory.createPouzivatelData();
             List<Pouzivatel> pouzivatelList = pouzivatelData.vsetky();
             Map<String, Object> model = new HashMap<>();
             model.put("pouzivatels", pouzivatelList);
@@ -61,7 +66,7 @@ public class PouzivatelPage {
             pouzivatel.setAdresa(adresa);
             pouzivatel.setPsc(psc);
 
-            PouzivatelData pouzivatelData = DataFactory.createDaoPouzivatel();
+            PouzivatelData pouzivatelData = DataFactory.createPouzivatelData();
             pouzivatelData.vloz(pouzivatel);
 
             if (action.equals("next")) {
@@ -77,9 +82,9 @@ public class PouzivatelPage {
                 routeContext.redirect("/pouzivatel");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            PouzivatelData data = DataFactory.createDaoPouzivatel();
+            PouzivatelData data = DataFactory.createPouzivatelData();
             data.zmaz(selectedid);
 
             routeContext.redirect("/pouzivatel");
@@ -91,9 +96,9 @@ public class PouzivatelPage {
                 routeContext.redirect("/pouzivatel");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            PouzivatelData pouzivatelData = DataFactory.createDaoPouzivatel();
+            PouzivatelData pouzivatelData = DataFactory.createPouzivatelData();
             Pouzivatel pouzivatel = pouzivatelData.getPouzivatel(selectedid);
             Map<String, Object> model = new HashMap<>();
             model.put("selectedid", selectedid);
@@ -117,7 +122,7 @@ public class PouzivatelPage {
                 routeContext.redirect("/pouzivatel");
                 return;
             }
-            Long selectedid = routeContext.getParameter("selectedid").toLong();
+            Integer selectedid = routeContext.getParameter("selectedid").toInt();
 
             String login_meno = routeContext.getParameter("login_meno").toString();
             String login_heslo = routeContext.getParameter("login_heslo").toString();
@@ -127,10 +132,9 @@ public class PouzivatelPage {
             String adresa = routeContext.getParameter("adresa").toString();
             String psc = routeContext.getParameter("psc").toString();
 
-            PouzivatelData pouzivatelData = DataFactory.createDaoPouzivatel();
+            PouzivatelData pouzivatelData = DataFactory.createPouzivatelData();
             Pouzivatel pouzivatel = pouzivatelData.getPouzivatel(selectedid);
 
-            pouzivatel.setId(0);
             pouzivatel.setLogin_meno(login_meno);
             pouzivatel.setLogin_heslo(login_heslo);
             pouzivatel.setMeno(meno);

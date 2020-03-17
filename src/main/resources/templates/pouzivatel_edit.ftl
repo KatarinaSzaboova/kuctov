@@ -14,7 +14,7 @@
         <input class="m_input_text" id="login_meno" name="login_meno" value="${login_meno}" placeholder="prihlasovacie meno" required>
     </p>
     <p>
-        <label for="login_heslo">Hheslo</label>
+        <label for="login_heslo">Heslo</label>
         <input type="password" class="m_input_text" id="login_heslo" name="login_heslo" value="${login_heslo}" placeholder="heslo" required>
     </p>
     <p>

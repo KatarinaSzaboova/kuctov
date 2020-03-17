@@ -13,11 +13,11 @@ import java.util.*;
 public class DFPage {
     public static void init(Pippo pippo) {
         pippo.GET("/df", routeContext -> {
-            Session session = routeContext.getRequest().getSession(false);
-            if (null == session) {
-                routeContext.redirect("/");
+            String strid = routeContext.getSession("pouzivatel_id");
+            int pouzivatel_id = (strid != null) ? Integer.parseInt(strid) : 0;
+            if (pouzivatel_id == 0) {
+                routeContext.redirect("/login");
             }
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
             Integer year = routeContext.getParameter("selectedyear").toInt();
             if(0 != year) {
@@ -26,24 +26,24 @@ public class DFPage {
             String firma = routeContext.getParameter("selectedfirma").toString();
             if(null != firma) {
                 prihlasenie.setFirma_nazov(firma);
-                FirmaData firmaData = DataFactory.createDaoFirma();
-                long firma_id = firmaData.idFirmy(pouzivatel_id, firma);
-                prihlasenie.setFirma_id(firma_id);
+                FirmaData firmaData = DataFactory.createFirmaData();
+                int firma_id = firmaData.idFirmy(pouzivatel_id, firma);
+                prihlasenie.setId_firma(firma_id);
             }
 
             Map<String, Object> model = new HashMap<>();
             model.put("selectedyear", prihlasenie.getRok());
             model.put("selectedfirma", prihlasenie.getFirma_nazov());
 
-            FirmaData firmaData = DataFactory.createDaoFirma();
+            FirmaData firmaData = DataFactory.createFirmaData();
             List<String> firmy = firmaData.nazvyFiriem(pouzivatel_id);
             model.put( "firmy", firmy);
 
             List<Integer> roky = new ArrayList<>(Arrays.asList(2018, 2019, 2020));
             model.put("roky", roky);
 
-            DFData dfData = DataFactory.createDaoDF();
-            List<DF> dfList = dfData.vsetky(prihlasenie.getFirma_id(), prihlasenie.getRok());
+            DFData dfData = DataFactory.createDFData();
+            List<DF> dfList = dfData.vsetky(prihlasenie.getId_firma(), prihlasenie.getRok());
             model.put("dfs", dfList);
 
             routeContext.render("df", model);
@@ -69,17 +69,17 @@ public class DFPage {
                 return;
             }
             Session session = routeContext.getRequest().getSession(false);
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
+            int pouzivatel_id = Integer.parseInt(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
 
-            Long cislo_faktury = routeContext.getParameter("cislo_faktury").toLong();
+            Integer cislo_faktury = routeContext.getParameter("cislo_faktury").toInt();
             String dodavatel = routeContext.getParameter("dodavatel").toString();
             String datum = routeContext.getParameter("datum").toString();
             Double sumabez = routeContext.getParameter("suma_bez_dph").toDouble();
 
             DF df = new DF();
-            df.setId(0L);
-            df.setId_firma(prihlasenie.getFirma_id());
+            df.setId(0);
+            df.setId_firma(prihlasenie.getId_firma());
             df.setCislo_faktury(cislo_faktury);
             df.setRok(prihlasenie.getRok());
             df.setDodavatel(dodavatel);
@@ -89,7 +89,7 @@ public class DFPage {
             df.setMena("EUR");
             df.setSuma_bez_dph(sumabez);
             df.setSuma_s_dph(sumabez * 1.2);
-            DFData dfData = DataFactory.createDaoDF();
+            DFData dfData = DataFactory.createDFData();
             dfData.vloz(df);
 
             if (action.equals("next")) {
@@ -105,9 +105,9 @@ public class DFPage {
                 routeContext.redirect("/df");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            DFData data = DataFactory.createDaoDF();
+            DFData data = DataFactory.createDFData();
             data.zmaz(selectedid);
 
             routeContext.redirect("/df");
@@ -119,9 +119,9 @@ public class DFPage {
                 routeContext.redirect("/df");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            DFData dfData = DataFactory.createDaoDF();
+            DFData dfData = DataFactory.createDFData();
             DF df = dfData.getDF(selectedid);
             Map<String, Object> model = new HashMap<>();
             model.put("selectedid", selectedid);
@@ -141,14 +141,14 @@ public class DFPage {
                 routeContext.redirect("/df");
                 return;
             }
-            Long selectedid = routeContext.getParameter("selectedid").toLong();
+            Integer selectedid = routeContext.getParameter("selectedid").toInt();
 
-            Long cislo_faktury = routeContext.getParameter("cislo_faktury").toLong();
+            Integer cislo_faktury = routeContext.getParameter("cislo_faktury").toInt();
             String dodavatel = routeContext.getParameter("dodavatel").toString();
             String datum = routeContext.getParameter("datum").toString();
             Double sumabez = routeContext.getParameter("suma_bez_dph").toDouble();
 
-            DFData dfData = DataFactory.createDaoDF();
+            DFData dfData = DataFactory.createDFData();
             DF df = dfData.getDF(selectedid);
             df.setCislo_faktury(cislo_faktury);
             df.setDodavatel(dodavatel);

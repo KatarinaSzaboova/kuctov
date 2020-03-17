@@ -15,11 +15,11 @@ import java.util.*;
 public class BankaPage {
     public static void init(Pippo pippo) {
         pippo.GET("/banka", routeContext -> {
-            Session session = routeContext.getRequest().getSession(false);
-            if (null == session) {
-                routeContext.redirect("/");
+            String strid = routeContext.getSession("pouzivatel_id");
+            int pouzivatel_id = (strid != null) ? Integer.parseInt(strid) : 0;
+            if (pouzivatel_id == 0) {
+                routeContext.redirect("/login");
             }
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
             Integer year = routeContext.getParameter("selectedyear").toInt();
             if (0 != year) {
@@ -28,21 +28,21 @@ public class BankaPage {
             String firma = routeContext.getParameter("selectedfirma").toString();
             if (null != firma) {
                 prihlasenie.setFirma_nazov(firma);
-                FirmaData firmaData = DataFactory.createDaoFirma();
-                long firma_id = firmaData.idFirmy(pouzivatel_id, firma);
-                prihlasenie.setFirma_id(firma_id);
+                FirmaData firmaData = DataFactory.createFirmaData();
+                int firma_id = firmaData.idFirmy(pouzivatel_id, firma);
+                prihlasenie.setId_firma(firma_id);
                 // treba opravit aj aktualny ucet lebo rozne firmy maju rozne ucty
-                BankUcetData ucetData = DataFactory.createDaoBankUcet();
+                BankUcetData ucetData = DataFactory.createBankUcetData();
                 List<BankUcet> buList = ucetData.preFirmu(firma_id);
-                prihlasenie.setUcet_id(buList.get(0).getId());
+                prihlasenie.setId_ucet(buList.get(0).getId());
                 prihlasenie.setUcet_nazov(buList.get(0).getNazov());
             }
             String ucet = routeContext.getParameter("selecteducet").toString();
             if (null != ucet) {
                 prihlasenie.setUcet_nazov(ucet);
-                BankUcetData ucetData = DataFactory.createDaoBankUcet();
-                long ucet_id = ucetData.idUctu(prihlasenie.getFirma_id(), ucet);
-                prihlasenie.setUcet_id(ucet_id);
+                BankUcetData ucetData = DataFactory.createBankUcetData();
+                int ucet_id = ucetData.idUctu(prihlasenie.getId_firma(), ucet);
+                prihlasenie.setId_ucet(ucet_id);
             }
 
             Map<String, Object> model = new HashMap<>();
@@ -50,19 +50,19 @@ public class BankaPage {
             model.put("selectedfirma", prihlasenie.getFirma_nazov());
             model.put("selecteducet", prihlasenie.getUcet_nazov());
 
-            FirmaData firmaData = DataFactory.createDaoFirma();
+            FirmaData firmaData = DataFactory.createFirmaData();
             List<String> firmy = firmaData.nazvyFiriem(pouzivatel_id);
             model.put("firmy", firmy);
 
-            BankUcetData ucetData = DataFactory.createDaoBankUcet();
-            List<String> ucty = ucetData.nazvyUctov(prihlasenie.getFirma_id());
+            BankUcetData ucetData = DataFactory.createBankUcetData();
+            List<String> ucty = ucetData.nazvyUctov(prihlasenie.getId_firma());
             model.put("ucty", ucty);
 
             List<Integer> roky = new ArrayList<>(Arrays.asList(2018, 2019, 2020));
             model.put("roky", roky);
 
-            BankaData bankaData = DataFactory.createDaoBanka();
-            List<Banka> bankaList = bankaData.vsetky(prihlasenie.getFirma_id(), prihlasenie.getUcet_id(), prihlasenie.getRok());
+            BankaData bankaData = DataFactory.createBankaData();
+            List<Banka> bankaList = bankaData.vsetky(prihlasenie.getId_firma(), prihlasenie.getId_ucet(), prihlasenie.getRok());
             model.put("bankas", bankaList);
 
             routeContext.render("banka", model);
@@ -75,7 +75,6 @@ public class BankaPage {
             model.put("form_action", "/banka_new");
 
             model.put("datum", "");
-            model.put("prijem_vydaj", "P");
             model.put("ovplyv_zd", "A");
             model.put("partner", "");
             model.put("partner_iban", "");
@@ -91,20 +90,19 @@ public class BankaPage {
                 return;
             }
             Session session = routeContext.getRequest().getSession(false);
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
+            int pouzivatel_id = Integer.parseInt(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
 
             String datum = routeContext.getParameter("datum").toString();
-            String prijem_vydaj = routeContext.getParameter("prijem_vydaj").toString();
             String ovplyv_zd = routeContext.getParameter("ovplyv_zd").toString();
             String partner = routeContext.getParameter("partner").toString();
             String partner_iban = routeContext.getParameter("partner_iban").toString();
             Double suma = routeContext.getParameter("suma").toDouble();
 
             Banka banka = new Banka();
-            banka.setId(0L);
-            banka.setId_firma(prihlasenie.getFirma_id());
-            banka.setId_ucet(prihlasenie.getUcet_id());
+            banka.setId(0);
+            banka.setId_firma(prihlasenie.getId_firma());
+            banka.setId_ucet(prihlasenie.getId_ucet());
             banka.setRok(prihlasenie.getRok());
             banka.setDatum(datum);
             banka.setOvplyv_zd(ovplyv_zd);
@@ -113,7 +111,7 @@ public class BankaPage {
             banka.setPartner(partner);
             banka.setPartner_iban(partner_iban);
 
-            BankaData bankaData = DataFactory.createDaoBanka();
+            BankaData bankaData = DataFactory.createBankaData();
             bankaData.vloz(banka);
 
             if (action.equals("next")) {
@@ -129,9 +127,9 @@ public class BankaPage {
                 routeContext.redirect("/banka");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            BankaData data = DataFactory.createDaoBanka();
+            BankaData data = DataFactory.createBankaData();
             data.zmaz(selectedid);
 
             routeContext.redirect("/banka");
@@ -143,9 +141,9 @@ public class BankaPage {
                 routeContext.redirect("/banka");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            BankaData bankaData = DataFactory.createDaoBanka();
+            BankaData bankaData = DataFactory.createBankaData();
             Banka banka = bankaData.getBanka(selectedid);
             Map<String, Object> model = new HashMap<>();
             model.put("selectedid", selectedid);
@@ -167,16 +165,15 @@ public class BankaPage {
                 routeContext.redirect("/banka");
                 return;
             }
-            Long selectedid = routeContext.getParameter("selectedid").toLong();
+            Integer selectedid = routeContext.getParameter("selectedid").toInt();
 
             String datum = routeContext.getParameter("datum").toString();
             String partner = routeContext.getParameter("partner").toString();
-            String prijem_vydaj = routeContext.getParameter("prijem_vydaj").toString();
             String ovplyv_zd = routeContext.getParameter("ovplyv_zd").toString();
             String partner_iban = routeContext.getParameter("partner_iban").toString();
             Double suma = routeContext.getParameter("suma").toDouble();
 
-            BankaData bankaData = DataFactory.createDaoBanka();
+            BankaData bankaData = DataFactory.createBankaData();
             Banka banka = bankaData.getBanka(selectedid);
 
             banka.setDatum(datum);

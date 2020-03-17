@@ -13,11 +13,11 @@ import java.util.*;
 public class VFPage {
     public static void init(Pippo pippo) {
         pippo.GET("/vf", routeContext -> {
-            Session session = routeContext.getRequest().getSession(false);
-            if (null == session) {
-                routeContext.redirect("/");
+            String strid = routeContext.getSession("pouzivatel_id");
+            int pouzivatel_id = (strid != null) ? Integer.parseInt(strid) : 0;
+            if (pouzivatel_id == 0) {
+                routeContext.redirect("/login");
             }
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
             Integer year = routeContext.getParameter("selectedyear").toInt();
             if(0 != year) {
@@ -26,24 +26,24 @@ public class VFPage {
             String firma = routeContext.getParameter("selectedfirma").toString();
             if(null != firma) {
                 prihlasenie.setFirma_nazov(firma);
-                FirmaData firmaData = DataFactory.createDaoFirma();
-                long firma_id = firmaData.idFirmy(pouzivatel_id, firma);
-                prihlasenie.setFirma_id(firma_id);
+                FirmaData firmaData = DataFactory.createFirmaData();
+                int firma_id = firmaData.idFirmy(pouzivatel_id, firma);
+                prihlasenie.setId_firma(firma_id);
             }
 
             Map<String, Object> model = new HashMap<>();
             model.put("selectedyear", prihlasenie.getRok());
             model.put("selectedfirma", prihlasenie.getFirma_nazov());
 
-            FirmaData firmaData = DataFactory.createDaoFirma();
+            FirmaData firmaData = DataFactory.createFirmaData();
             List<String> firmy = firmaData.nazvyFiriem(pouzivatel_id);
             model.put( "firmy", firmy);
 
             List<Integer> roky = new ArrayList<>(Arrays.asList(2018, 2019, 2020));
             model.put("roky", roky);
 
-            VFData vfData = DataFactory.createDaoVF();
-            List<VF> vfList = vfData.vsetky(prihlasenie.getFirma_id(), prihlasenie.getRok());
+            VFData vfData = DataFactory.createVFData();
+            List<VF> vfList = vfData.vsetky(prihlasenie.getId_firma(), prihlasenie.getRok());
             model.put("vfs", vfList);
 
             routeContext.render("vf", model);
@@ -70,17 +70,17 @@ public class VFPage {
                 return;
             }
             Session session = routeContext.getRequest().getSession(false);
-            long pouzivatel_id = Long.parseLong(session.get("pouzivatel_id"));
+            int pouzivatel_id = Integer.parseInt(session.get("pouzivatel_id"));
             Prihlasenie prihlasenie = DataFactory.getPrihlasenie(pouzivatel_id);
 
-            Long cislo_faktury = routeContext.getParameter("cislo_faktury").toLong();
+            Integer cislo_faktury = routeContext.getParameter("cislo_faktury").toInt();
             String odberatel = routeContext.getParameter("odberatel").toString();
             String datum = routeContext.getParameter("datum").toString();
             Double sumabez = routeContext.getParameter("suma_bez_dph").toDouble();
 
             VF vf = new VF();
-            vf.setId(0L);
-            vf.setId_firma(prihlasenie.getFirma_id());
+            vf.setId(0);
+            vf.setId_firma(prihlasenie.getId_firma());
             vf.setCislo_faktury(cislo_faktury);
             vf.setRok(prihlasenie.getRok());
             vf.setOdberatel(odberatel);
@@ -90,7 +90,7 @@ public class VFPage {
             vf.setMena("EUR");
             vf.setSuma_bez_dph(sumabez);
             vf.setSuma_s_dph(sumabez * 1.2);
-            VFData vfData = DataFactory.createDaoVF();
+            VFData vfData = DataFactory.createVFData();
             vfData.vloz(vf);
 
             if (action.equals("next")) {
@@ -106,9 +106,9 @@ public class VFPage {
                 routeContext.redirect("/vf");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            VFData bankaData = DataFactory.createDaoVF();
+            VFData bankaData = DataFactory.createVFData();
             bankaData.zmaz(selectedid);
 
             routeContext.redirect("/vf");
@@ -120,9 +120,9 @@ public class VFPage {
                 routeContext.redirect("/vf");
                 return;
             }
-            Long selectedid = Long.parseLong(id);
+            Integer selectedid = Integer.parseInt(id);
 
-            VFData vfData = DataFactory.createDaoVF();
+            VFData vfData = DataFactory.createVFData();
             VF vf = vfData.getVF(selectedid);
             Map<String, Object> model = new HashMap<>();
             model.put("selectedid", selectedid);
@@ -142,14 +142,14 @@ public class VFPage {
                 routeContext.redirect("/vf");
                 return;
             }
-            Long selectedid = routeContext.getParameter("selectedid").toLong();
+            Integer selectedid = routeContext.getParameter("selectedid").toInt();
 
-            Long cislo_faktury = routeContext.getParameter("cislo_faktury").toLong();
+            Integer cislo_faktury = routeContext.getParameter("cislo_faktury").toInt();
             String odberatel = routeContext.getParameter("odberatel").toString();
             String datum = routeContext.getParameter("datum").toString();
             Double sumabez = routeContext.getParameter("suma_bez_dph").toDouble();
 
-            VFData vfData = DataFactory.createDaoVF();
+            VFData vfData = DataFactory.createVFData();
             VF vf = vfData.getVF(selectedid);
             vf.setCislo_faktury(cislo_faktury);
             vf.setOdberatel(odberatel);
