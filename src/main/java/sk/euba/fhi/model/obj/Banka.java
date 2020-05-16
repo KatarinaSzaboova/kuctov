@@ -3,7 +3,6 @@ package sk.euba.fhi.model.obj;
 
 public class Banka {
     private int id;
-    private int id_firma;
     private int id_ucet;
     private int rok;
     private String datum;
@@ -19,14 +18,6 @@ public class Banka {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getId_firma() {
-        return id_firma;
-    }
-
-    public void setId_firma(int id_firma) {
-        this.id_firma = id_firma;
     }
 
     public int getId_ucet() {

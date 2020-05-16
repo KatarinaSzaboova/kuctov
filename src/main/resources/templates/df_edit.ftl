@@ -11,19 +11,23 @@
 <input name="selectedid" id="selectedid" value="${selectedid}" hidden></input>
     <p>
         <label for="cislo_faktury">Číslo faktúry</label>
-        <input class="m_input_text" id="cislo_faktury" name="cislo_faktury" value="${cislo_faktury}" placeholder="číslo faktúry" required>
+        <input type="number" step="1"
+        class="m_input_text" id="cislo_faktury" name="cislo_faktury" value="${cislo_faktury}" placeholder="číslo faktúry" required>
     </p>
     <p>
         <label for="dodavatel">Dodávateľ</label>
-        <input class="m_input_text" id="dodavatel" name="dodavatel" value="${dodavatel}" placeholder="dodavatel" required>
+        <input type="text"  maxlength="40"
+        class="m_input_text" id="dodavatel" name="dodavatel" value="${dodavatel}" placeholder="dodavatel" required>
     </p>
     <p>
         <label for="cena_bez_dph">Cena bez DPH</label>
-        <input class="m_input_text" id="suma_bez_dph" name="suma_bez_dph" value="${suma_bez_dph}" placeholder="cena bez DPH" required>
+        <input type="number" step="0.01"
+        class="m_input_text" id="suma_bez_dph" name="suma_bez_dph" value="${suma_bez_dph}" placeholder="cena bez DPH" required>
     </p>
     <p>
         <label for="meno">Dátum</label>
-        <input class="m_input_text" id="datum" name="datum" value="${datum}" placeholder="dátum" required>
+        <input type="date"
+        class="m_input_text" id="datum" name="datum" value="${datum}" placeholder="dátum" required>
     </p>
     <p>
         <div class="btn-group">

@@ -30,7 +30,7 @@ public class FirmaDataMock implements FirmaData {
             firma.setPsc("82102");
             firma.setIco("44981082");
             firma.setDic("2022903949");
-            firma.setIc_dph("Sk2022903949");
+            firma.setIc_dph("SK2022903949");
             firmaList.add(firma);
         }
         {
@@ -42,7 +42,7 @@ public class FirmaDataMock implements FirmaData {
             firma.setPsc("83104");
             firma.setIco("44981073");
             firma.setDic("2022903987");
-            firma.setIc_dph("Sk2022903654");
+            firma.setIc_dph("SK2022903654");
             firmaList.add(firma);
         }
 
@@ -55,7 +55,7 @@ public class FirmaDataMock implements FirmaData {
             firma.setPsc("85102");
             firma.setIco("45281082");
             firma.setDic("2022520949");
-            firma.setIc_dph("Sk2088456949");
+            firma.setIc_dph("SK2088456949");
             firmaList.add(firma);
         }
     }

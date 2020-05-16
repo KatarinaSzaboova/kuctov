@@ -62,7 +62,7 @@ public class BankaPage {
             model.put("roky", roky);
 
             BankaData bankaData = DataFactory.createBankaData();
-            List<Banka> bankaList = bankaData.vsetky(prihlasenie.getId_firma(), prihlasenie.getId_ucet(), prihlasenie.getRok());
+            List<Banka> bankaList = bankaData.vsetky(prihlasenie.getId_ucet(), prihlasenie.getRok());
             model.put("bankas", bankaList);
 
             routeContext.render("banka", model);
@@ -101,7 +101,6 @@ public class BankaPage {
 
             Banka banka = new Banka();
             banka.setId(0);
-            banka.setId_firma(prihlasenie.getId_firma());
             banka.setId_ucet(prihlasenie.getId_ucet());
             banka.setRok(prihlasenie.getRok());
             banka.setDatum(datum);

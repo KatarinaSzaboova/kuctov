@@ -11,27 +11,33 @@
 <input name="selectedid" id="selectedid" value="${selectedid}" hidden></input>
     <p>
         <label for="nazov">Názov</label>
-        <input class="m_input_text" id="nazov" name="nazov" value="${nazov}" placeholder="názov" required>
+        <input type="text" maxlength="40"
+        class="m_input_text" id="nazov" name="nazov" value="${nazov}" placeholder="názov" required>
     </p>
     <p>
         <label for="adresa">Adresa</label>
-        <input class="m_input_text" id="adresa" name="adresa" value="${adresa}" placeholder="adresa" required>
+        <input type="text" maxlength="60"
+        class="m_input_text" id="adresa" name="adresa" value="${adresa}" placeholder="adresa" required>
     </p>
     <p>
         <label for="psc">PSČ</label>
-        <input class="m_input_text" id="psc" name="psc" value="${psc}" placeholder="psč" required>
+        <input type="text" pattern="[0-9]{5}"
+        class="m_input_text" id="psc" name="psc" value="${psc}" placeholder="psč" required>
     </p>
     <p>
         <label for="ico">IČO</label>
-        <input class="m_input_text" id="ico" name="ico" value="${ico}" placeholder="ičo" required>
+        <input type="text" pattern="[0-9]{8}"
+        class="m_input_text" id="ico" name="ico" value="${ico}" placeholder="ičo" required>
     </p>
     <p>
         <label for="dic">DIČ</label>
-        <input class="m_input_text" id="dic" name="dic" value="${dic}" placeholder="dič" required>
+        <input type="text" pattern="[0-9]{10}"
+        class="m_input_text" id="dic" name="dic" value="${dic}" placeholder="dič" required>
     </p>
     <p>
         <label for="ic_dph">IČ_DPH</label>
-        <input class="m_input_text" id="ic_dph" name="ic_dph" value="${ic_dph}" placeholder="ič_dph" required>
+        <input type="text" pattern="SK[0-9]{10}"
+        class="m_input_text" id="ic_dph" name="ic_dph" value="${ic_dph}" placeholder="ič_dph" required>
     </p>
     <p>
         <div class="btn-group">

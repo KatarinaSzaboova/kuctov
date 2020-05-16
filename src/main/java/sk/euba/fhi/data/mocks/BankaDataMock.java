@@ -31,8 +31,8 @@ public class BankaDataMock implements BankaData {
                 .mapToInt(Integer::intValue);
         MockUnitInt id = m.intSeq().start(1);
 
-        MockUnitInt id_firmy = m.probabilites(Integer.class)
-                .add(1.0, m.ints().range(1, 4))
+        MockUnitInt id_uctu = m.probabilites(Integer.class)
+                .add(1.0, m.ints().range(1, 5))
                 .mapToInt(Integer::intValue);
 
         MockUnitInt id_ucet1 = m.probabilites(Integer.class)
@@ -59,18 +59,9 @@ public class BankaDataMock implements BankaData {
             for (int i = 0; i < odberateila.size(); i++) {
                 Banka banka = new Banka();
 
-                int idFirmy = id_firmy.val().intValue();
-                int idUctu = 0;
-                if (idFirmy == 1) {
-                    idUctu = id_ucet1.val().intValue();
-                } else if (idFirmy == 2) {
-                    idUctu = 3;
-                } else {
-                    idUctu = 4;
-                }
+                int idUctu = id_uctu.val().intValue();
 
                 banka.setId(id.val().intValue());
-                banka.setId_firma(idFirmy);
                 banka.setId_ucet(idUctu);
                 banka.setRok(rok);
                 String nDatum = dates.get(i);
@@ -86,12 +77,11 @@ public class BankaDataMock implements BankaData {
         }
     }
 
-    public List<Banka> vsetky(int id_firmy, int id_uctu, int rok) {
-        if (id_firmy == 0) {
+    public List<Banka> vsetky(int id_uctu, int rok) {
+        if (id_uctu == 0) {
             return bankaList;
         }
-        Predicate<Banka> byFilter = p -> p.getId_firma() == id_firmy
-                && p.getId_ucet() == id_uctu && p.getRok() == rok;
+        Predicate<Banka> byFilter = p -> p.getId_ucet() == id_uctu && p.getRok() == rok;
         List<Banka> result = bankaList.stream().filter(byFilter)
                 .collect(Collectors.toList());
         return result;

@@ -11,19 +11,23 @@
 <input name="selectedid" id="selectedid" value="${selectedid}" hidden></input>
     <p>
         <label for="nazov">Názov účtu</label>
-        <input class="m_input_text" id="nazov" name="nazov" value="${nazov}" placeholder="nazov" required>
+        <input type="text" maxlength="40"
+        class="m_input_text" id="nazov" name="nazov" value="${nazov}" placeholder="nazov" required>
     </p>
     <p>
         <label for="bic">BIC</label>
-        <input class="m_input_text" id="bic" name="bic" value="${bic}" placeholder="bic / swift číslo" required>
+        <input type="text" minlength="8" maxlength="8"
+        class="m_input_text" id="bic" name="bic" value="${bic}" placeholder="bic / swift číslo" required>
     </p>
     <p>
         <label for="iban">IBAN</label>
-        <input class="m_input_text" id="iban" name="iban" value="${iban}" placeholder="iban" required>
+        <input type="text" pattern="[A-Z]{2}[0-9]{22}"
+        class="m_input_text" id="iban" name="iban" value="${iban}" placeholder="iban" required>
     </p>
     <p>
         <label for="mena">Mena</label>
-        <input class="m_input_text" id="mena" name="mena" value="${mena}" required readonly>
+        <input type="text" pattern="EUR{3}"
+        class="m_input_text" id="mena" name="mena" value="${mena}" required readonly>
     </p>
     <p>
         <div class="btn-group">

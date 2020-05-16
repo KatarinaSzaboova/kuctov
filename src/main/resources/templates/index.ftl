@@ -38,14 +38,13 @@
     <div class="m_card">
       <h3>Aplikácia kuctov</h3>
       <p>
-        Aplikácia kuctov predstavuje zjednodúšenú verziu webovej aplikácie pre modelovanie porcesov
+        Aplikácia kuctov predstavuje zjednodušenú verziu webovej aplikácie pre modelovanie procesov
         jednoduchého účtovníctva. Aplikácia bola vytvorená v rámci vypracovania diplomovej práce.
       </p>
       <p>
-        V aplikácii je implementovná základná funkcionalita týkajúca sa správy pokladne, vyšlých
-        a došlých faktúr a banky. Funkcionalitu zabezpečujú tabuľky používateľov, firiem, bankových účtov, apod. Ako
-        špeciálna rozširujúca funkcionalita pre aplikáciu zameranej na jednoduché účtovníctvo,
-        je implementované načítanie bankových výpisov vo formáte CSV.
+        V aplikácii je obsiahnutá základná funkcionalita týkajúca sa správy pokladne, vyšlých
+        a došlých faktúr a banky. Funkcionalitu zabezpečujú tabuľky používateľov, firiem, bankových účtov, apod. V úlohe
+        špeciálnej rozširujúcej funkcionality je implementované načítanie bankových výpisov vo formáte CSV.
       </p>
     </div>
 </div>

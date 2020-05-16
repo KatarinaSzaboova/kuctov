@@ -16,20 +16,18 @@ import java.util.List;
 public class BankaDataMySQL implements BankaData {
     private static final Logger logger = LoggerFactory.getLogger(BankaDataMySQL.class);
 
-    public List<Banka> vsetky(int id_firma, int id_ucet, int rok) {
+    public List<Banka> vsetky(int id_ucet, int rok) {
         List<Banka> zoznam = new ArrayList<>();
         Connection connection = new ConnectionManager().createConnection();
         if (connection != null) {
             try {
-                PreparedStatement ps = connection.prepareStatement("SELECT * FROM banka WHERE id_firma = ? AND id_ucet = ? AND rok = ?");
-                ps.setInt(1, id_firma);
-                ps.setInt(2,id_ucet);
-                ps.setInt(3, rok);
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM banka WHERE id_ucet = ? AND rok = ?");
+                ps.setInt(1,id_ucet);
+                ps.setInt(2, rok);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     Banka obj = new Banka();
                     obj.setId(rs.getInt("id"));
-                    obj.setId_firma(rs.getInt("id_firma"));
                     obj.setId_ucet(rs.getInt("id_ucet"));
                     obj.setRok(rs.getInt("rok"));
                     obj.setDatum(rs.getString("datum"));
@@ -58,7 +56,6 @@ public class BankaDataMySQL implements BankaData {
                 if (rs.next()) {
                     banka = new Banka();
                     banka.setId(rs.getInt("id"));
-                    banka.setId_firma(rs.getInt("id_firma"));
                     banka.setId_ucet(rs.getInt("id_ucet"));
                     banka.setRok(rs.getInt("rok"));
                     banka.setDatum(rs.getString("datum"));
@@ -81,16 +78,15 @@ public class BankaDataMySQL implements BankaData {
         Connection connection = new ConnectionManager().createConnection();
         if (connection != null) {
             try {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO banka (id_firma, id_ucet, rok, datum, ovplyv_zd, mena, suma, partner, partner_iban) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )");
-                ps.setInt(1, banka.getId_firma());
-                ps.setInt(2, banka.getId_ucet());
-                ps.setInt(3, banka.getRok());
-                ps.setString(4, banka.getDatum());
-                ps.setString(5, banka.getOvplyv_zd());
-                ps.setString(6, banka.getMena());
-                ps.setDouble(7, banka.getSuma());
-                ps.setString(8, banka.getPartner());
-                ps.setString(9, banka.getPartner_iban());
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO banka (id_ucet, rok, datum, ovplyv_zd, mena, suma, partner, partner_iban) VALUES (?, ?, ?, ?, ?, ?, ?, ? )");
+                ps.setInt(1, banka.getId_ucet());
+                ps.setInt(2, banka.getRok());
+                ps.setString(3, banka.getDatum());
+                ps.setString(4, banka.getOvplyv_zd());
+                ps.setString(5, banka.getMena());
+                ps.setDouble(6, banka.getSuma());
+                ps.setString(7, banka.getPartner());
+                ps.setString(8, banka.getPartner_iban());
                 int rows = ps.executeUpdate();
                 //logger.debug("Pocet vlozenych riadkov: {}", rows);
             } catch (SQLException ex) {
@@ -105,7 +101,6 @@ public class BankaDataMySQL implements BankaData {
             try {
                 PreparedStatement ps = connection.prepareStatement("UPDATE banka\n" +
                         "SET \n" +
-                        "    id_firma = ?, \n" +
                         "    id_ucet = ?, \n" +
                         "    rok = ?,\n" +
                         "    datum = ?,\n" +
@@ -117,16 +112,15 @@ public class BankaDataMySQL implements BankaData {
                         "WHERE\n" +
                         "    id = ?;");
 
-                ps.setInt(1, banka.getId_firma());
-                ps.setInt(2, banka.getId_ucet());
-                ps.setInt(3, banka.getRok());
-                ps.setString(4,banka.getDatum());
-                ps.setString(5, banka.getOvplyv_zd());
-                ps.setString(6, banka.getMena());
-                ps.setDouble(7, banka.getSuma());
-                ps.setString(8, banka.getPartner());
-                ps.setString(9, banka.getPartner_iban());
-                ps.setInt(10, banka.getId());
+                ps.setInt(1, banka.getId_ucet());
+                ps.setInt(2, banka.getRok());
+                ps.setString(3,banka.getDatum());
+                ps.setString(4, banka.getOvplyv_zd());
+                ps.setString(5, banka.getMena());
+                ps.setDouble(6, banka.getSuma());
+                ps.setString(7, banka.getPartner());
+                ps.setString(8, banka.getPartner_iban());
+                ps.setInt(9, banka.getId());
                 int rows = ps.executeUpdate();
                 assert (rows != 1);
             } catch (SQLException ex) {

@@ -11,23 +11,28 @@
 <input name="selectedid" id="selectedid" value="${selectedid}" hidden></input>
     <p>
         <label for="cislo_dokladu">Číslo Dokladu</label>
-        <input class="m_input_text" id="cislo_dokladu" name="cislo_dokladu" value="${cislo_dokladu}" placeholder="číslo dokladu" required>
+        <input type="number" step="1"
+        class="m_input_text" id="cislo_dokladu" name="cislo_dokladu" value="${cislo_dokladu}" placeholder="číslo dokladu" required>
     </p>
     <p>
         <label for="vzor">Vzor</label>
-        <input class="m_input_text" id="vzor" name="vzor" value="${vzor}" placeholder="vzor" required>
+        <input type="text"  maxlength="20"
+        class="m_input_text" id="vzor" name="vzor" value="${vzor}" placeholder="vzor" required>
     </p>
     <p>
         <label for="cena_bez_dph">Cena bez DPH</label>
-        <input class="m_input_text" id="suma_bez_dph" name="suma_bez_dph" value="${suma_bez_dph}" placeholder="cena bez DPH" required>
+        <input type="number" step="0.01"
+        class="m_input_text" id="suma_bez_dph" name="suma_bez_dph" value="${suma_bez_dph}" placeholder="cena bez DPH" required>
     </p>
     <p>
-        <label for="ovplyv_zd">Ovplyvňuje základ dane</label>
-        <input class="m_input_text" id="ovplyv_zd" name="ovplyv_zd" value="${ovplyv_zd}" placeholder="A/N" required>
+        <label for="ovplyv_zd">Ovplyvňuje základ dane (A/N)</label>
+        <input type="text" pattern="[AN]{1}"
+        class="m_input_text" id="ovplyv_zd" name="ovplyv_zd" value="${ovplyv_zd}" placeholder="A/N" required>
     </p>
     <p>
         <label for="meno">Dátum</label>
-        <input class="m_input_text" id="datum" name="datum" value="${datum}" placeholder="dátum" required>
+        <input type="date"
+        class="m_input_text" id="datum" name="datum" value="${datum}" placeholder="dátum" required>
     </p>
     <p>
         <div class="btn-group">

@@ -103,7 +103,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
     </div>
     <div class="modal-body">
       <br>
-      <p>Ste si istí, že chcete vymazať položku z databázy?</p>
+      <p>Ste si istý, že chcete vymazať položku z databázy?</p>
       <br>
     </div>
     <div class="modal-footer">

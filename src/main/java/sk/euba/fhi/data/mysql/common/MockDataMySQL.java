@@ -126,7 +126,6 @@ public class MockDataMySQL {
                 {
                     String sql = "CREATE TABLE `banka`(\n" +
                             "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
-                            "  `id_firma` int(11) NOT NULL,\n" +
                             "  `id_ucet` int(11) NOT NULL,\n" +
                             "  `rok` int(4) NOT NULL,\n" +
                             "  `datum` char(12) NOT NULL,\n" +
@@ -135,7 +134,6 @@ public class MockDataMySQL {
                             "  `suma` decimal(9,2) NOT NULL,\n" +
                             "  `partner` char(40),\n" +
                             "  `partner_iban` char(40),\n" +
-                            "  FOREIGN KEY(`id_firma`) references `firma`(`id`),\n" +
                             "  FOREIGN KEY(`id_ucet`) references `bank_ucet`(`id`),\n" +
                             "  PRIMARY KEY (`id`)\n" +
                             ")ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;\n";
@@ -335,20 +333,19 @@ public class MockDataMySQL {
                 }
                 {
                     BankaDataMock data = new BankaDataMock();
-                    List<Banka> vs = data.vsetky(0, 0, 0);
+                    List<Banka> vs = data.vsetky(0, 0);
                     for (Banka e : vs) {
                         PreparedStatement ps = connection.prepareStatement("INSERT INTO banka\n" +
-                                "(id_firma, id_ucet, rok, datum, ovplyv_zd, mena, suma, partner, partner_iban) \n" +
-                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
-                        ps.setInt(1, e.getId_firma());
-                        ps.setInt(2, e.getId_ucet());
-                        ps.setInt(3, e.getRok());
-                        ps.setString(4, e.getDatum());
-                        ps.setString(5, e.getOvplyv_zd());
-                        ps.setString(6, e.getMena());
-                        ps.setDouble(7, e.getSuma());
-                        ps.setString(8, e.getPartner());
-                        ps.setString(9, e.getPartner_iban());
+                                "(id_ucet, rok, datum, ovplyv_zd, mena, suma, partner, partner_iban) \n" +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+                        ps.setInt(1, e.getId_ucet());
+                        ps.setInt(2, e.getRok());
+                        ps.setString(3, e.getDatum());
+                        ps.setString(4, e.getOvplyv_zd());
+                        ps.setString(5, e.getMena());
+                        ps.setDouble(6, e.getSuma());
+                        ps.setString(7, e.getPartner());
+                        ps.setString(8, e.getPartner_iban());
                         ps.executeUpdate();
                     }
                 }

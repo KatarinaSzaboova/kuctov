@@ -65,7 +65,7 @@ public class UploadVypisyPage {
                 file.write(uploadedFile);
 
                 Map<String, Object> model = new HashMap<>();
-                String info = "Súbor '" + fileName + "' bol úspešne nahratý'";
+                String info = "Súbor '" + fileName + "' bol úspešne nahratý";
                 model.put("info", info);
                 routeContext.render("upload_vypisy", model);
 
@@ -85,7 +85,6 @@ public class UploadVypisyPage {
 
                     Banka banka = new Banka();
                     banka.setId(0);
-                    banka.setId_firma(prihlasenie.getId_firma());
                     banka.setId_ucet(prihlasenie.getId_ucet());
                     banka.setRok(Integer.parseInt(rok));
                     banka.setDatum(datum);

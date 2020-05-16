@@ -1,6 +1,14 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
+group = 'sk.euba.fhi'
+version = '1.0'
+jar.baseName = 'kuctov'
+mainClassName = 'sk.euba.fhi.AppClass'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+
 buildscript {
   repositories {
     maven {
@@ -14,13 +22,7 @@ buildscript {
 
 apply plugin: "com.github.johnrengelman.shadow"
 
-group = 'sk.euba.fhi'
-version = '1.0'
-jar.baseName = 'kuctov'
-mainClassName = 'sk.euba.fhi.AppClass'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-compileJava.options.encoding = 'UTF-8'
+
 
 repositories {
     mavenCentral()

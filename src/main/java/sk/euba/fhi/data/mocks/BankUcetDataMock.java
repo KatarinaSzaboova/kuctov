@@ -37,7 +37,7 @@ public class BankUcetDataMock implements BankUcetData {
             bank_ucet.setId_firma(1);
             bank_ucet.setNazov("Účet TATRA BANKA");
             bank_ucet.setBic("TATRSKBX");
-            bank_ucet.setIban("SK330200000000000002508");
+            bank_ucet.setIban("SK3302000000000000002508");
             bank_ucet.setMena("EUR");
             bankUcetList.add(bank_ucet);
         }

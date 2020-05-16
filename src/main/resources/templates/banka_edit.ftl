@@ -11,23 +11,28 @@
 <input name="selectedid" id="selectedid" value="${selectedid}" hidden></input>
     <p>
         <label for="meno">Dátum</label>
-        <input class="m_input_text" id="datum" name="datum" value="${datum}" placeholder="dátum" required>
+        <input type="date"
+        class="m_input_text" id="datum" name="datum" value="${datum}" placeholder="dátum" required>
     </p>
        <p>
         <label for="partner">Partner</label>
-        <input class="m_input_text" id="partner" name="partner" value="${partner}" placeholder="partner" required>
+        <input type="text"  maxlength="40"
+        class="m_input_text" id="partner" name="partner" value="${partner}" placeholder="partner" required>
     </p>
     <p>
         <label for="partner_iban">IBAN</label>
-        <input class="m_input_text" id="partner_iban" name="partner_iban" value="${partner_iban}" placeholder="partner iban" required>
+        <input type="text"  maxlength="40"
+        class="m_input_text" id="partner_iban" name="partner_iban" value="${partner_iban}" placeholder="partner iban" required>
     </p>
     <p>
-        <label for="ovplyv_zd">Ovplyvňuje základ dane</label>
-        <input class="m_input_text" id="ovplyv_zd" name="ovplyv_zd" value="${ovplyv_zd}" placeholder="A/N" required>
+        <label for="ovplyv_zd">Ovplyvňuje základ dane (A/N)</label>
+        <input type="text" pattern="[AN]{1}"
+        class="m_input_text" id="ovplyv_zd" name="ovplyv_zd" value="${ovplyv_zd}" placeholder="A/N" required>
     </p>
     <p>
         <label for="suma">Suma</label>
-        <input class="m_input_text" id="suma" name="suma" value="${suma}" placeholder="suma" required>
+        <input type="number" step="0.01"
+        class="m_input_text" id="suma" name="suma" value="${suma}" placeholder="suma" required>
     </p>
     <p>
         <div class="btn-group">

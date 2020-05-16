@@ -64,7 +64,6 @@
 <table id="m_page_tbl">
     <tr>
         <th>ID</th>
-        <th>ID Firmy</th>
         <th>ID Účet</th>
         <th>Dátum</th>
         <th>Ovplyvňuje základ dane</th>
@@ -77,7 +76,6 @@
         <#list bankas as banka>
             <tr>
                 <td>${banka.id}</td>
-                <td>${banka.id_firma}</td>
                 <td>${banka.id_ucet}</td>
                 <td>${banka.datum}</td>
                 <td>${banka.ovplyv_zd}</td>
